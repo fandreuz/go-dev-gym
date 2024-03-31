@@ -93,3 +93,34 @@ func TestLength(t *testing.T) {
 		t.Error()
 	}
 }
+
+func TestAt(t *testing.T) {
+	handle := NewLinkedList(10)
+	handle.Append(12, 14, 16)
+
+	handle2, err := handle.At(0)
+	if err != nil {
+		t.Error(err.Error())
+	}
+	if handle2.value != 10 {
+		t.Error()
+	}
+
+	handle2, err = handle.At(3)
+	if err != nil {
+		t.Error(err.Error())
+	}
+	if handle2.value != 16 {
+		t.Error()
+	}
+}
+
+func TestAtError(t *testing.T) {
+	handle := NewLinkedList(10)
+	handle.Append(12, 14, 16)
+
+	_, err := handle.At(4)
+	if err == nil {
+		t.Error()
+	}
+}

@@ -1,6 +1,9 @@
 package linkedlist
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type node[T any] struct {
 	next  *node[T]
@@ -50,4 +53,20 @@ func (handle *node[T]) Lenght() (int64, error) {
 		length++
 	}
 	return length, nil
+}
+
+func (handle *node[T]) At(index int64) (*node[T], error) {
+	if !handle.head {
+		return nil, errors.New("handle is not head")
+	}
+
+	var current *node[T] = handle
+	for currentIndex := int64(0); currentIndex < index; currentIndex++ {
+		if !current.HasNext() {
+			msg := fmt.Sprintf("list too short for the given index: %v", index)
+			return nil, errors.New(msg)
+		}
+		current = current.Next()
+	}
+	return current, nil
 }
