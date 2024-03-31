@@ -85,7 +85,11 @@ func TestLength(t *testing.T) {
 	handle := NewLinkedList(10)
 	handle.Append(12, 14, 16)
 
-	if handle.Lenght() != 4 {
+	l, err := handle.Lenght()
+	if err != nil {
+		t.Error(err.Error())
+	}
+	if l != 4 {
 		t.Error()
 	}
 }

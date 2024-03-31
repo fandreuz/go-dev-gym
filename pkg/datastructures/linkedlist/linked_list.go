@@ -1,5 +1,7 @@
 package linkedlist
 
+import "errors"
+
 type node[T any] struct {
 	next  *node[T]
 	value T
@@ -36,13 +38,16 @@ func (handle *node[T]) Last() *node[T] {
 	return current
 }
 
-func (handle *node[T]) Lenght() int64 {
-	var length int64 = 1
+func (handle *node[T]) Lenght() (int64, error) {
+	if !handle.head {
+		return -1, errors.New("handle is not head")
+	}
 
+	var length int64 = 1
 	var current *node[T] = handle
 	for current.HasNext() {
 		current = current.Next()
 		length++
 	}
-	return length
+	return length, nil
 }
