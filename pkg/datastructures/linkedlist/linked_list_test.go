@@ -11,6 +11,9 @@ func TestNew(t *testing.T) {
 	if handle.next != nil {
 		t.Error()
 	}
+	if !handle.head {
+		t.Error()
+	}
 }
 
 func TestHasNext(t *testing.T) {
@@ -35,6 +38,9 @@ func TestAppend(t *testing.T) {
 		t.Error()
 	}
 	if handle2.HasNext() {
+		t.Error()
+	}
+	if handle2.head {
 		t.Error()
 	}
 }

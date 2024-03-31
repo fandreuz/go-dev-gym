@@ -3,10 +3,11 @@ package linkedlist
 type node[T any] struct {
 	next  *node[T]
 	value T
+	head  bool
 }
 
 func NewLinkedList[T any](value T) *node[T] {
-	return &node[T]{nil, value}
+	return &node[T]{nil, value, true}
 }
 
 func (handle *node[T]) HasNext() bool {
@@ -21,7 +22,7 @@ func (handle *node[T]) Append(values ...T) *node[T] {
 	handle = handle.Last()
 
 	for _, value := range values {
-		handle.next = &node[T]{nil, value}
+		handle.next = &node[T]{nil, value, false}
 		handle = handle.next
 	}
 	return handle
