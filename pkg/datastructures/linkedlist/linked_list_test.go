@@ -1,4 +1,4 @@
-package datastructures
+package linkedlist
 
 import "testing"
 
@@ -6,10 +6,10 @@ func TestNew(t *testing.T) {
 	handle := NewLinkedList(10)
 
 	if handle.value != 10 {
-		t.Fail()
+		t.Error()
 	}
 	if handle.next != nil {
-		t.Fail()
+		t.Error()
 	}
 }
 
@@ -17,7 +17,7 @@ func TestHasNext(t *testing.T) {
 	handle := NewLinkedList(10)
 
 	if handle.HasNext() {
-		t.Fail()
+		t.Error()
 	}
 }
 
@@ -26,16 +26,37 @@ func TestAppend(t *testing.T) {
 	handle2, err := handle.Append(12)
 
 	if err != nil {
+		t.Error(err.Error())
+	}
+	if handle.value != 10 {
+		t.Error()
+	}
+	if handle2.value != 12 {
+		t.Error()
+	}
+	if handle2.HasNext() {
+		t.Error()
+	}
+}
+
+func TestAppendMany(t *testing.T) {
+	handle := NewLinkedList(10)
+	_, err := handle.Append(12, 14, 16)
+
+	if err != nil {
 		t.Fatalf(err.Error())
 	}
 	if handle.value != 10 {
-		t.Fail()
+		t.Error()
 	}
-	if handle2.value != 12 {
-		t.Fail()
+	if handle.next.value != 12 {
+		t.Error()
 	}
-	if handle2.HasNext() {
-		t.Fail()
+	if handle.next.next.value != 14 {
+		t.Error()
+	}
+	if handle.next.next.next.value != 16 {
+		t.Error()
 	}
 }
 
@@ -44,16 +65,24 @@ func TestNext(t *testing.T) {
 	handle.Append(12)
 
 	if handle.Next().value != 12 {
-		t.Fail()
+		t.Error()
 	}
 }
 
 func TestLast(t *testing.T) {
 	handle := NewLinkedList(10)
-	handle2, _ := handle.Append(12)
-	handle2.Append(14)
+	handle.Append(12, 14)
 
 	if handle.Last().value != 14 {
-		t.Fail()
+		t.Error()
+	}
+}
+
+func TestLength(t *testing.T) {
+	handle := NewLinkedList(10)
+	handle.Append(12, 14, 16)
+
+	if handle.Lenght() != 4 {
+		t.Error()
 	}
 }
