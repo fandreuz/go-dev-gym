@@ -1,7 +1,5 @@
 package linkedlist
 
-import "errors"
-
 type node[T any] struct {
 	next  *node[T]
 	value T
@@ -19,15 +17,14 @@ func (handle *node[T]) Next() *node[T] {
 	return handle.next
 }
 
-func (handle *node[T]) Append(values ...T) (*node[T], error) {
-	if handle.HasNext() {
-		return nil, errors.New("given handle has already a next")
-	}
+func (handle *node[T]) Append(values ...T) *node[T] {
+	handle = handle.Last()
+
 	for _, value := range values {
 		handle.next = &node[T]{nil, value}
 		handle = handle.next
 	}
-	return handle, nil
+	return handle
 }
 
 func (handle *node[T]) Last() *node[T] {

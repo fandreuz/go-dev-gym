@@ -23,15 +23,15 @@ func TestHasNext(t *testing.T) {
 
 func TestAppend(t *testing.T) {
 	handle := NewLinkedList(10)
-	handle2, err := handle.Append(12)
+	handle2 := handle.Append(12)
 
-	if err != nil {
-		t.Error(err.Error())
-	}
 	if handle.value != 10 {
 		t.Error()
 	}
 	if handle2.value != 12 {
+		t.Error()
+	}
+	if handle.next != handle2 {
 		t.Error()
 	}
 	if handle2.HasNext() {
@@ -41,11 +41,8 @@ func TestAppend(t *testing.T) {
 
 func TestAppendMany(t *testing.T) {
 	handle := NewLinkedList(10)
-	_, err := handle.Append(12, 14, 16)
+	handle.Append(12, 14, 16)
 
-	if err != nil {
-		t.Fatalf(err.Error())
-	}
 	if handle.value != 10 {
 		t.Error()
 	}
