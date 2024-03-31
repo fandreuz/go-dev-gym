@@ -3,7 +3,7 @@ package linkedlist
 import "testing"
 
 func TestNew(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 
 	if handle.value != 10 {
 		t.Error()
@@ -17,7 +17,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestHasNext(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 
 	if handle.HasNext() {
 		t.Error()
@@ -25,7 +25,7 @@ func TestHasNext(t *testing.T) {
 }
 
 func TestAppend(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 	handle2 := handle.Append(12)
 
 	if handle.value != 10 {
@@ -46,7 +46,7 @@ func TestAppend(t *testing.T) {
 }
 
 func TestAppendMany(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 	handle.Append(12, 14, 16)
 
 	if handle.value != 10 {
@@ -64,7 +64,7 @@ func TestAppendMany(t *testing.T) {
 }
 
 func TestNext(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 	handle.Append(12)
 
 	if handle.Next().value != 12 {
@@ -73,7 +73,7 @@ func TestNext(t *testing.T) {
 }
 
 func TestLast(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 	handle.Append(12, 14)
 
 	if handle.Last().value != 14 {
@@ -82,10 +82,10 @@ func TestLast(t *testing.T) {
 }
 
 func TestLength(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 	handle.Append(12, 14, 16)
 
-	l, err := handle.Lenght()
+	l, err := handle.Length()
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -95,7 +95,7 @@ func TestLength(t *testing.T) {
 }
 
 func TestAt(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 	handle.Append(12, 14, 16)
 
 	handle2, err := handle.At(0)
@@ -116,7 +116,7 @@ func TestAt(t *testing.T) {
 }
 
 func TestAtError(t *testing.T) {
-	handle := NewLinkedList(10)
+	handle := New(10)
 	handle.Append(12, 14, 16)
 
 	_, err := handle.At(4)

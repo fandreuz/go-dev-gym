@@ -11,7 +11,7 @@ type node[T any] struct {
 	head  bool
 }
 
-func NewLinkedList[T any](value T) *node[T] {
+func New[T any](value T) *node[T] {
 	return &node[T]{nil, value, true}
 }
 
@@ -41,7 +41,7 @@ func (handle *node[T]) Last() *node[T] {
 	return current
 }
 
-func (handle *node[T]) Lenght() (int64, error) {
+func (handle *node[T]) Length() (int64, error) {
 	if !handle.head {
 		return -1, errors.New("handle is not head")
 	}
@@ -69,4 +69,8 @@ func (handle *node[T]) At(index int64) (*node[T], error) {
 		current = current.Next()
 	}
 	return current, nil
+}
+
+func (handle *node[T]) RemoveNext() {
+	handle.next = nil
 }
