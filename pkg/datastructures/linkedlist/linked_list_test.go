@@ -7,12 +7,15 @@ func TestNew(t *testing.T) {
 
 	if handle.value != 10 {
 		t.Error()
+		t.FailNow()
 	}
 	if handle.next != nil {
 		t.Error()
+		t.FailNow()
 	}
 	if !handle.head {
 		t.Error()
+		t.FailNow()
 	}
 }
 
@@ -21,6 +24,7 @@ func TestHasNext(t *testing.T) {
 
 	if handle.HasNext() {
 		t.Error()
+		t.FailNow()
 	}
 }
 
@@ -30,18 +34,23 @@ func TestAppend(t *testing.T) {
 
 	if handle.value != 10 {
 		t.Error()
+		t.FailNow()
 	}
 	if handle2.value != 12 {
 		t.Error()
+		t.FailNow()
 	}
 	if handle.next != handle2 {
 		t.Error()
+		t.FailNow()
 	}
 	if handle2.HasNext() {
 		t.Error()
+		t.FailNow()
 	}
 	if handle2.head {
 		t.Error()
+		t.FailNow()
 	}
 }
 
@@ -51,15 +60,19 @@ func TestAppendMany(t *testing.T) {
 
 	if handle.value != 10 {
 		t.Error()
+		t.FailNow()
 	}
 	if handle.next.value != 12 {
 		t.Error()
+		t.FailNow()
 	}
 	if handle.next.next.value != 14 {
 		t.Error()
+		t.FailNow()
 	}
 	if handle.next.next.next.value != 16 {
 		t.Error()
+		t.FailNow()
 	}
 }
 
@@ -69,6 +82,7 @@ func TestNext(t *testing.T) {
 
 	if handle.Next().value != 12 {
 		t.Error()
+		t.FailNow()
 	}
 }
 
@@ -78,6 +92,7 @@ func TestLast(t *testing.T) {
 
 	if handle.Last().value != 14 {
 		t.Error()
+		t.FailNow()
 	}
 }
 
@@ -88,9 +103,11 @@ func TestLength(t *testing.T) {
 	l, err := handle.Length()
 	if err != nil {
 		t.Error(err.Error())
+		t.FailNow()
 	}
 	if l != 4 {
 		t.Error()
+		t.FailNow()
 	}
 }
 
@@ -101,17 +118,21 @@ func TestAt(t *testing.T) {
 	handle2, err := handle.At(0)
 	if err != nil {
 		t.Error(err.Error())
+		t.FailNow()
 	}
 	if handle2.value != 10 {
 		t.Error()
+		t.FailNow()
 	}
 
 	handle2, err = handle.At(3)
 	if err != nil {
 		t.Error(err.Error())
+		t.FailNow()
 	}
 	if handle2.value != 16 {
 		t.Error()
+		t.FailNow()
 	}
 }
 
@@ -122,5 +143,6 @@ func TestAtError(t *testing.T) {
 	_, err := handle.At(4)
 	if err == nil {
 		t.Error()
+		t.FailNow()
 	}
 }
