@@ -116,3 +116,41 @@ func TestContains(t *testing.T) {
 		t.FailNow()
 	}
 }
+
+func TestRemoveFrom2(t *testing.T) {
+	list, err := New[int32](10)
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+
+	list.Insert(20)
+	list.Insert(10)
+	list.Remove(20)
+
+	expected := []int32{10}
+	if !reflect.DeepEqual(*(list.AsArray()), expected) {
+		t.Errorf("Expected: %v, actual %v", expected, *(list.AsArray()))
+		t.FailNow()
+	}
+}
+
+func TestRemoveFrom3(t *testing.T) {
+	list, err := New[int32](10)
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+
+	list.Insert(20)
+	list.Insert(10)
+	list.Insert(19)
+
+	list.Remove(20)
+
+	expected := []int32{10, 19}
+	if !reflect.DeepEqual(*(list.AsArray()), expected) {
+		t.Errorf("Expected: %v, actual %v", expected, *(list.AsArray()))
+		t.FailNow()
+	}
+}

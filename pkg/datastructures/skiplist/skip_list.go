@@ -162,3 +162,27 @@ func (list SkipList[T]) AsArray() *[]T {
 	}
 	return &array
 }
+
+// true when removed
+func (list *SkipList[T]) Remove(value T) bool {
+	closestSmallers := list.closestSmallers(value)
+	if len(closestSmallers.nodes) > 0 && !closestSmallers.superNext().hasValue(value) {
+		return false
+	}
+
+	target := *closestSmallers.superNext()
+	l := uint(len(target.nexts))
+	for level := uint(1); level <= l; level++ {
+		oldNext := *target.next(level)
+		smallerAtLevel := closestSmallers.atLevel(level)
+		if !smallerAtLevel.placeholder && smallerAtLevel.next(level).hasValue(value) {
+			smallerAtLevel.setNext(level, oldNext)
+		}
+
+		if list.head(level).hasValue(value) {
+			list.setHead(level, oldNext)
+		}
+	}
+
+	return true
+}
