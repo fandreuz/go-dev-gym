@@ -3,7 +3,6 @@ package skiplist
 import (
 	"cmp"
 	"errors"
-	"fmt"
 	"math"
 	"math/rand"
 )
@@ -37,6 +36,14 @@ type SkipList[T cmp.Ordered] struct {
 
 type SliceByLevel[T cmp.Ordered] struct {
 	nodes []node[T]
+}
+
+func (sliceByLevel SliceByLevel[T]) superNext() *node[T] {
+	target := sliceByLevel.atLevel(1)
+	if len(target.nexts) > 0 {
+		return target.next(1)
+	}
+	return &(*placeholderNodes[T](1))[0]
 }
 
 func New[T cmp.Ordered](n uint64) (SkipList[T], error) {
@@ -79,7 +86,7 @@ func (list SkipList[T]) closestSmallers(value T) SliceByLevel[T] {
 		var prev node[T] = ancestors[0]
 
 		for level := list.topLevel; level > 0; level-- {
-			for !currentNode.placeholder && currentNode.value <= value {
+			for !currentNode.placeholder && currentNode.value < value {
 				prev = *currentNode
 				currentNode = currentNode.next(level)
 			}
@@ -103,7 +110,7 @@ func (list SkipList[T]) closestSmallers(value T) SliceByLevel[T] {
 
 func (list SkipList[T]) Contains(value T) bool {
 	closestSmallers := list.closestSmallers(value)
-	return closestSmallers.atLevel(1).hasValue(value)
+	return closestSmallers.superNext().hasValue(value)
 }
 
 func (list SkipList[T]) decideLevel() uint {
@@ -114,10 +121,11 @@ func (list SkipList[T]) decideLevel() uint {
 	return level
 }
 
-func (list *SkipList[T]) Insert(value T) error {
+// true when added
+func (list *SkipList[T]) Insert(value T) bool {
 	closestSmallers := list.closestSmallers(value)
-	if len(closestSmallers.nodes) > 0 && closestSmallers.atLevel(list.topLevel).hasValue(value) {
-		return fmt.Errorf("value exists already: %v", value)
+	if len(closestSmallers.nodes) > 0 && closestSmallers.superNext().hasValue(value) {
+		return false
 	}
 
 	selectedLevel := list.decideLevel()
@@ -144,7 +152,7 @@ func (list *SkipList[T]) Insert(value T) error {
 		list.topLevel = selectedLevel
 	}
 
-	return nil
+	return true
 }
 
 func (list SkipList[T]) AsArray() *[]T {
