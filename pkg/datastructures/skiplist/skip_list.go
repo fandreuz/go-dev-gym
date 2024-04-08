@@ -164,7 +164,7 @@ func (list SkipList[T]) AsArray() *[]T {
 }
 
 // true when removed
-func (list *SkipList[T]) Remove(value T) bool {
+func (list SkipList[T]) Remove(value T) bool {
 	closestSmallers := list.closestSmallers(value)
 	if len(closestSmallers.nodes) > 0 && !closestSmallers.superNext().hasValue(value) {
 		return false
