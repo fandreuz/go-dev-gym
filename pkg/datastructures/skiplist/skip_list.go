@@ -3,12 +3,17 @@ package skiplist
 import (
 	"cmp"
 	"errors"
+	"fmt"
 	"math"
 	"math/rand"
+	"strings"
 )
 
 // Probability of jumping to the next skip-list level, see decideLevel()
 const p = .5
+const intervalueSeparatorLength = 3
+const intervalueSeparator = '-'
+const crossChar = '|'
 
 type node[T cmp.Ordered] struct {
 	nexts       []node[T]
@@ -185,4 +190,98 @@ func (list SkipList[T]) Remove(value T) bool {
 	}
 
 	return true
+}
+
+func (list SkipList[T]) distancesPerLevel() [][]uint64 {
+	output := make([][]uint64, list.topLevel)
+	for level := uint(1); level <= list.topLevel; level++ {
+		output[level-1] = make([]uint64, 1)
+	}
+
+	for currentNode := list.head(1); !currentNode.placeholder; currentNode = currentNode.next(1) {
+		level := uint(1)
+		for ; level <= uint(len(currentNode.nexts)); level++ {
+			if !currentNode.next(level).placeholder {
+				output[level-1] = append(output[level-1], 0)
+			}
+		}
+		for ; level <= uint(list.topLevel); level++ {
+			l := len(output[level-1])
+			output[level-1][l-1]++
+		}
+	}
+
+	return output
+}
+
+func printInternodeSeparator() {
+	for i := 0; i < intervalueSeparatorLength; i++ {
+		fmt.Printf("%c", intervalueSeparator)
+	}
+}
+
+func printNodeEmptyPlaceholder(nodeMaxWidth uint8) {
+	for i := uint8(0); i < nodeMaxWidth; i++ {
+		fmt.Printf("%c", intervalueSeparator)
+	}
+}
+
+func printNodeFullPlaceholder(nodeMaxWidth uint8) {
+	for i := uint8(0); i < nodeMaxWidth/2; i++ {
+		fmt.Printf("%c", intervalueSeparator)
+	}
+	fmt.Printf("%c", crossChar)
+	for i := uint8(0); i < nodeMaxWidth/2; i++ {
+		fmt.Printf("%c", intervalueSeparator)
+	}
+}
+
+func centerString(str string, width int) string {
+	spaces := int(float64(width-len(str)) / 2)
+	return strings.Repeat(" ", spaces) + str + strings.Repeat(" ", width-(spaces+len(str)))
+}
+
+func printNode[T any](value T, nodeMaxWidth uint8) {
+	fmt.Print(centerString(fmt.Sprintf("%v", value), int(nodeMaxWidth)))
+}
+
+func (list SkipList[T]) widestNodeWidth() uint8 {
+	maxWidth := uint8(0)
+	for currentNode := list.head(1); !currentNode.placeholder; currentNode = currentNode.next(1) {
+		maxWidth = max(maxWidth, uint8(len(fmt.Sprintf("%v", currentNode.value))))
+	}
+	return maxWidth
+}
+
+func (list SkipList[T]) PrettyPrint() {
+	distances := list.distancesPerLevel()
+	nodeMaxWidth := list.widestNodeWidth() + 2
+	if nodeMaxWidth%2 == 0 {
+		nodeMaxWidth++
+	}
+	fmt.Println(distances)
+
+	for level := uint(len(distances)); level > 1; level-- {
+		distancesAtLevel := distances[level-1]
+		for i := uint(0); i < uint(len(distancesAtLevel)); i++ {
+			for j := uint64(0); j < uint64(distancesAtLevel[i]); j++ {
+				printNodeEmptyPlaceholder(nodeMaxWidth)
+				printInternodeSeparator()
+			}
+
+			printNodeFullPlaceholder(nodeMaxWidth)
+			if i != uint(len(distancesAtLevel)-1) {
+				printInternodeSeparator()
+			}
+		}
+		fmt.Println()
+	}
+
+	for currentNode := list.head(1); !currentNode.placeholder; currentNode = currentNode.next(1) {
+		if currentNode != list.head(1) {
+			printInternodeSeparator()
+		}
+		printNode(currentNode.value, nodeMaxWidth)
+	}
+	fmt.Println()
 }
