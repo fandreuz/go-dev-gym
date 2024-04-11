@@ -259,7 +259,6 @@ func (list SkipList[T]) PrettyPrint() {
 	if nodeMaxWidth%2 == 0 {
 		nodeMaxWidth++
 	}
-	fmt.Println(distances)
 
 	for level := uint(len(distances)); level > 1; level-- {
 		distancesAtLevel := distances[level-1]
