@@ -7,3 +7,4 @@ Trying out Go on some popular algorithms.
 - [Linked list](pkg/datastructures/linkedlist/)
 - [Doubly linked list](pkg/datastructures/doublylinkedlist/)
 - [Skip list](pkg/datastructures/skiplist/)
+- [Hash map](pkg/datastructures/hashmap/)
